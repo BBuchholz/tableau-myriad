@@ -1,6 +1,13 @@
 .App {
   text-align: center;
 }
+
+img {
+  width: 40vw;
+  height: 30vh;
+  object-fit: contain;
+}
+
 .tableau {
   background-color: #2196F3;
   padding: 10px;

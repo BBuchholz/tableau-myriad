@@ -3,7 +3,7 @@
 }
 
 img {
-  width: 40vw;
+  width: 20vw;
   height: 30vh;
   object-fit: contain;
 }
@@ -27,6 +27,6 @@ img.rotated {
 }
 
 .stack {
-  display: flex;
-  justify-content: flex-end;
+  /*display: flex;
+  justify-content: flex-end;*/
 }

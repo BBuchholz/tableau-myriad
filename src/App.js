@@ -150,13 +150,13 @@ function App() {
     <div className="App">
       <Container className="tableau" fluid>
         <Row>
-          <Col>
+          <Col xs={4}>
             <Stack isHorizontal="true" 
                    handleClick={handleDrawClick} 
                    legendText={drawLegendText}
                    jpgPath={drawJpgPath} />
           </Col>
-          <Col>
+          <Col xs={4}>
             <Stack isHorizontal="true" 
                    handleClick={handleDiscardClick} 
                    legendText={discardLegendText}
@@ -164,24 +164,24 @@ function App() {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col xs={4}>
             <Stack handleClick={handleStackOneClick} 
                    legendText={stackOneLegendText}
                    jpgPath={stackOneJpgPath} />
           </Col>
-          <Col>
+          <Col xs={4}>
             <Stack handleClick={handleStackTwoClick} 
                    legendText={stackTwoLegendText}
                    jpgPath={stackTwoJpgPath} />
           </Col>
         </Row>
         <Row> 
-          <Col>
+          <Col xs={4}>
             <Stack handleClick={handleStackThreeClick} 
                    legendText={stackThreeLegendText}
                    jpgPath={stackThreeJpgPath} />
           </Col>
-          <Col>
+          <Col xs={4}>
             <Stack handleClick={handleStackFourClick} 
                    legendText={stackFourLegendText}
                    jpgPath={stackFourJpgPath} />

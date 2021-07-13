@@ -150,38 +150,36 @@ function App() {
     <div className="App">
       <Container className="tableau" fluid>
         <Row>
-          <Col xs={4}>
-            <Stack isHorizontal="true" 
-                   handleClick={handleDrawClick} 
+          <Col xs={5}>
+            <Stack handleClick={handleDrawClick} 
                    legendText={drawLegendText}
                    jpgPath={drawJpgPath} />
           </Col>
-          <Col xs={4}>
-            <Stack isHorizontal="true" 
-                   handleClick={handleDiscardClick} 
+          <Col xs={5}>
+            <Stack handleClick={handleDiscardClick} 
                    legendText={discardLegendText}
                    jpgPath={discardJpgPath} />
           </Col>
         </Row>
         <Row>
-          <Col xs={4}>
+          <Col xs={5}>
             <Stack handleClick={handleStackOneClick} 
                    legendText={stackOneLegendText}
                    jpgPath={stackOneJpgPath} />
           </Col>
-          <Col xs={4}>
+          <Col xs={5}>
             <Stack handleClick={handleStackTwoClick} 
                    legendText={stackTwoLegendText}
                    jpgPath={stackTwoJpgPath} />
           </Col>
         </Row>
         <Row> 
-          <Col xs={4}>
+          <Col xs={5}>
             <Stack handleClick={handleStackThreeClick} 
                    legendText={stackThreeLegendText}
                    jpgPath={stackThreeJpgPath} />
           </Col>
-          <Col xs={4}>
+          <Col xs={5}>
             <Stack handleClick={handleStackFourClick} 
                    legendText={stackFourLegendText}
                    jpgPath={stackFourJpgPath} />
@@ -190,6 +188,7 @@ function App() {
       </Container> 
     </div>
   );
+
 }
 
 
@@ -200,12 +199,12 @@ function Stack({isHorizontal,
   
   let className = '';
   if(isHorizontal) {
-    className += 'rotated'
+    //className += 'rotated'
   }
   
   return (
     <div className='stack' onClick={handleClick}>
-      <p>{legendText}</p>
+      <p>[{legendText}]</p>
       <img 
           className={className}
           src={jpgPath}

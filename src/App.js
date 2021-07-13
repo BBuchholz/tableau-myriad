@@ -71,15 +71,15 @@ function App() {
   }
 
   function handleStackTwoClick() {
-    alert("StackTwo clicked");
+    alert(JSON.stringify(stackTwoCards));
   }
 
   function handleStackThreeClick() {
-    alert("StackThree clicked");
+    alert(JSON.stringify(stackThreeCards));
   }
 
   function handleStackFourClick() {
-    alert("StackFour clicked");
+    alert(JSON.stringify(stackFourCards));
   }
 
   function peek(arr){
@@ -87,51 +87,50 @@ function App() {
     return arr[idx]
   }
 
-  function handleDrawClick() {
-    // if(drawDeckCards.length < 1){
-    //   alert("out of cards, redealing");
-    //   loadDeck();
-    // }
+  function drawCards(quantity) {
     
-    // let cardKey = peek(drawDeckCards);
-    // setDrawDeckCards(drawDeckCards.filter(key => key !== cardKey));
-    // setDrawLegendText(drawDeckCards.length);
+    const sliced = drawDeckCards.slice(quantity);
 
-    // setStackOneCards([...stackOneCards, cardKey]);
-    // setStackOneLegendText(cardKey);
-    // setStackOneJpgPath(cardKeyToImagePath(cardKey));
-    handleSingleDealToStack(stackOneCards, 
+    const newDeck = drawDeckCards.filter(key => !sliced.includes(key));
+    alert(newDeck);
+    setDrawDeckCards(newDeck);
+    setDrawLegendText(newDeck.length);
+
+    return sliced;
+  }
+
+  function handleDrawClick() {
+
+    let cardKeys = drawCards(4);
+
+    handleSingleDealToStack(cardKeys[0],
+                            stackOneCards, 
                             setStackOneCards, 
                             setStackOneLegendText, 
                             setStackOneJpgPath);
-
-    handleSingleDealToStack(stackTwoCards, 
+    handleSingleDealToStack(cardKeys[1],
+                            stackTwoCards, 
                             setStackTwoCards, 
                             setStackTwoLegendText, 
                             setStackTwoJpgPath);
-    handleSingleDealToStack(stackThreeCards, 
+    handleSingleDealToStack(cardKeys[2],
+                            stackThreeCards, 
                             setStackThreeCards, 
                             setStackThreeLegendText, 
                             setStackThreeJpgPath);
-    handleSingleDealToStack(stackFourCards, 
+    handleSingleDealToStack(cardKeys[3],
+                            stackFourCards, 
                             setStackFourCards, 
                             setStackFourLegendText, 
                             setStackFourJpgPath);
   }
 
-  function handleSingleDealToStack(stackArr, 
+  function handleSingleDealToStack(cardKey,
+                                   stackArr, 
                                    setStackArr,
                                    setStackLegendText,
                                    setStackJpgPath){
 
-    if(drawDeckCards.length < 1){
-      alert("out of cards, redealing");
-      loadDeck();
-    }
-    
-    let cardKey = peek(drawDeckCards);
-    setDrawDeckCards(drawDeckCards.filter(key => key !== cardKey));
-    setDrawLegendText(drawDeckCards.length);
 
     setStackArr([...stackArr, cardKey]);
     setStackLegendText(cardKey);

@@ -3,6 +3,8 @@ import './App.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 import React, { useState } from 'react';
 
 
@@ -155,9 +157,8 @@ function App() {
                    jpgPath={drawJpgPath} />
           </Col>
           <Col xs={5}>
-            <Stack handleClick={handleDiscardClick} 
-                   legendText={discardLegendText}
-                   jpgPath={discardJpgPath} />
+            <DiscardStack
+              jpgPath={discardJpgPath} />
           </Col>
         </Row>
         <Row>
@@ -190,6 +191,35 @@ function App() {
 
 }
 
+function DiscardStack({jpgPath}) {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <div>
+      <Stack handleClick={handleShow} 
+             legendText={'Click Me'}
+             jpgPath={jpgPath} />
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+}
 
 function Stack({isHorizontal,
                 handleClick,

@@ -19,8 +19,19 @@ function App() {
            cardKey + ".jpg";
   }
 
-  const [drawDeckCards, setDrawDeckCards] = useState([]);
-  const [discardPileCards, setDiscardPileCards] = useState([]);
+  const [gameData, setGameData] = useState({
+    status: 'not initialized',
+    score: 0,
+    drawStack: [],
+    discardStack: [],
+    oneStack: [],
+    twoStack: [],
+    threeStack: [],
+    fourStack: []
+  });
+  
+
+  //const [discardPileCards, setDiscardPileCards] = useState([]);
   
   const [stackOneCards, setStackOneCards] = useState([]);
   const [stackTwoCards, setStackTwoCards] = useState([]);
@@ -43,24 +54,26 @@ function App() {
   const [stackThreeJpgPath, setStackThreeJpgPath] = useState("");
   const [stackFourJpgPath, setStackFourJpgPath] = useState("");
 
+
+  
   function loadDeck(){
     if(discardJpgPath === ""){
       setDiscardJpgPath(cardKeyToImagePath("2B"));
     }
-    if(drawDeckCards.length < 1){
-      drawDeckCards.push("2C");  
-      drawDeckCards.push("2H");  
-      drawDeckCards.push("2S");  
-      drawDeckCards.push("2D"); 
-      drawDeckCards.push("3C");  
-      drawDeckCards.push("3H");  
-      drawDeckCards.push("3S");  
-      drawDeckCards.push("3D"); 
-      drawDeckCards.push("4C");  
-      drawDeckCards.push("4H");  
-      drawDeckCards.push("4S");  
-      drawDeckCards.push("4D");  
-      setDrawLegendText(drawDeckCards.length);
+    if(gameData.drawStack.length < 1){
+      gameData.drawStack.push("2C");  
+      gameData.drawStack.push("2H");  
+      gameData.drawStack.push("2S");  
+      gameData.drawStack.push("2D"); 
+      gameData.drawStack.push("3C");  
+      gameData.drawStack.push("3H");  
+      gameData.drawStack.push("3S");  
+      gameData.drawStack.push("3D"); 
+      gameData.drawStack.push("4C");  
+      gameData.drawStack.push("4H");  
+      gameData.drawStack.push("4S");  
+      gameData.drawStack.push("4D");  
+      setDrawLegendText(gameData.drawStack.length);
       setDrawJpgPath(cardKeyToImagePath("1B"));
     }  
   }
@@ -91,14 +104,21 @@ function App() {
 
   function drawCards(quantity) {
     
-    const sliced = drawDeckCards.slice(quantity);
+    const sliced = gameData.drawStack.slice(quantity);
 
-    const newDeck = drawDeckCards.filter(key => !sliced.includes(key));
-    alert(newDeck);
-    setDrawDeckCards(newDeck);
-    setDrawLegendText(newDeck.length);
+    const newDeck = gameData.drawStack.filter(key => !sliced.includes(key));
+    
+    let newGameData = gameData;
+    newGameData.drawStack = newDeck;
+    newGameData.status = generateStatus(newGameData);
+    setGameData(newGameData);
+    setDrawLegendText(newGameData.drawStack.length);
 
     return sliced;
+  }
+
+  function generateStatus(thisGameData){
+    return 'Draw Stack: ' + JSON.stringify(thisGameData.drawStack);
   }
 
   function handleDrawClick() {
@@ -125,6 +145,8 @@ function App() {
                             setStackFourCards, 
                             setStackFourLegendText, 
                             setStackFourJpgPath);
+
+
   }
 
   function handleSingleDealToStack(cardKey,
@@ -139,13 +161,9 @@ function App() {
     setStackJpgPath(cardKeyToImagePath(cardKey)); 
   }
 
-  function handleDiscardClick() {
-    alert("discard clicked");
-  }
-
-
 
   loadDeck();
+
 
   return (
     <div className="App">
@@ -158,7 +176,8 @@ function App() {
           </Col>
           <Col xs={5}>
             <DiscardStack
-              jpgPath={discardJpgPath} />
+              jpgPath={discardJpgPath}
+              bodyText={gameData.status} />
           </Col>
         </Row>
         <Row>
@@ -191,7 +210,7 @@ function App() {
 
 }
 
-function DiscardStack({jpgPath}) {
+function DiscardStack({jpgPath, bodyText}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -207,7 +226,9 @@ function DiscardStack({jpgPath}) {
         <Modal.Header closeButton>
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+          {bodyText}
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close

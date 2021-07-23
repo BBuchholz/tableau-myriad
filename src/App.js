@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 
 function App() {
@@ -17,7 +17,8 @@ function App() {
     return "https://raw.githubusercontent.com/BBuchholz/" + 
            "make-ten-mod/jpg-mod/public/images/cards-jpg/" + 
            cardKey + ".jpg";
-  }
+  };
+
 
   const [gameData, setGameData] = useState({
     status: 'not initialized',
@@ -33,7 +34,7 @@ function App() {
 
   //const [discardPileCards, setDiscardPileCards] = useState([]);
   
-  const [stackOneCards, setStackOneCards] = useState([]);
+  // const [stackOneCards, setStackOneCards] = useState([]);
   const [stackTwoCards, setStackTwoCards] = useState([]);
   const [stackThreeCards, setStackThreeCards] = useState([]);
   const [stackFourCards, setStackFourCards] = useState([]);
@@ -54,7 +55,19 @@ function App() {
   const [stackThreeJpgPath, setStackThreeJpgPath] = useState("");
   const [stackFourJpgPath, setStackFourJpgPath] = useState("");
 
-
+  useEffect(() => {
+    setDiscardLegendText("x");
+    setDrawLegendText("draw");
+    setStackOneLegendText("x");
+    setStackTwoLegendText("x");
+    setStackThreeLegendText("x");
+    setStackFourLegendText("x");
+    setDrawJpgPath(cardKeyToImagePath("1B"));
+    setStackOneJpgPath(cardKeyToImagePath("2D"));
+    setStackTwoJpgPath(cardKeyToImagePath("2D"));
+    setStackThreeJpgPath(cardKeyToImagePath("2D"));
+    setStackFourJpgPath(cardKeyToImagePath("2D"));
+  });
   
   function loadDeck(){
     if(discardJpgPath === ""){
@@ -82,7 +95,6 @@ function App() {
   function handleStackOneClick() {
     
 
-    alert(JSON.stringify(stackOneCards));
   }
 
   function handleStackTwoClick() {
@@ -104,17 +116,18 @@ function App() {
 
   function drawCards(quantity) {
     
-    const sliced = gameData.drawStack.slice(quantity);
+    const drawnCardKeys = gameData.drawStack.slice(quantity);
 
-    const newDeck = gameData.drawStack.filter(key => !sliced.includes(key));
+    const newDeck = gameData.drawStack.filter(key => !drawnCardKeys.includes(key));
     
     let newGameData = gameData;
     newGameData.drawStack = newDeck;
+    newGameData.oneStack = [...gameData.oneStack, drawnCardKeys[0]];
+    newGameData.twoStack = [...gameData.twoStack, drawnCardKeys[1]];
+    newGameData.threeStack = [...gameData.threeStack, drawnCardKeys[2]];
+    newGameData.fourStack = [...gameData.fourStack, drawnCardKeys[3]];
     newGameData.status = generateStatus(newGameData);
     setGameData(newGameData);
-    setDrawLegendText(newGameData.drawStack.length);
-
-    return sliced;
   }
 
   function generateStatus(thisGameData){
@@ -123,42 +136,8 @@ function App() {
 
   function handleDrawClick() {
 
-    let cardKeys = drawCards(4);
+    drawCards(4);
 
-    handleSingleDealToStack(cardKeys[0],
-                            stackOneCards, 
-                            setStackOneCards, 
-                            setStackOneLegendText, 
-                            setStackOneJpgPath);
-    handleSingleDealToStack(cardKeys[1],
-                            stackTwoCards, 
-                            setStackTwoCards, 
-                            setStackTwoLegendText, 
-                            setStackTwoJpgPath);
-    handleSingleDealToStack(cardKeys[2],
-                            stackThreeCards, 
-                            setStackThreeCards, 
-                            setStackThreeLegendText, 
-                            setStackThreeJpgPath);
-    handleSingleDealToStack(cardKeys[3],
-                            stackFourCards, 
-                            setStackFourCards, 
-                            setStackFourLegendText, 
-                            setStackFourJpgPath);
-
-
-  }
-
-  function handleSingleDealToStack(cardKey,
-                                   stackArr, 
-                                   setStackArr,
-                                   setStackLegendText,
-                                   setStackJpgPath){
-
-
-    setStackArr([...stackArr, cardKey]);
-    setStackLegendText(cardKey);
-    setStackJpgPath(cardKeyToImagePath(cardKey)); 
   }
 
 

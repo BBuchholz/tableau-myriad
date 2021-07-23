@@ -35,9 +35,9 @@ function App() {
   //const [discardPileCards, setDiscardPileCards] = useState([]);
   
   // const [stackOneCards, setStackOneCards] = useState([]);
-  const [stackTwoCards, setStackTwoCards] = useState([]);
-  const [stackThreeCards, setStackThreeCards] = useState([]);
-  const [stackFourCards, setStackFourCards] = useState([]);
+  // const [stackTwoCards, setStackTwoCards] = useState([]);
+  // const [stackThreeCards, setStackThreeCards] = useState([]);
+  // const [stackFourCards, setStackFourCards] = useState([]);
   
   const [drawLegendText, setDrawLegendText] = useState("");
   const [discardLegendText, setDiscardLegendText] = useState("");
@@ -63,7 +63,8 @@ function App() {
     setStackThreeLegendText("x");
     setStackFourLegendText("x");
     setDrawJpgPath(cardKeyToImagePath("1B"));
-    setStackOneJpgPath(cardKeyToImagePath("2D"));
+    const oneStackKey = peek(gameData.oneStack);
+    setStackOneJpgPath(cardKeyToImagePath(oneStackKey));
     setStackTwoJpgPath(cardKeyToImagePath("2D"));
     setStackThreeJpgPath(cardKeyToImagePath("2D"));
     setStackFourJpgPath(cardKeyToImagePath("2D"));
@@ -98,15 +99,15 @@ function App() {
   }
 
   function handleStackTwoClick() {
-    alert(JSON.stringify(stackTwoCards));
+
   }
 
   function handleStackThreeClick() {
-    alert(JSON.stringify(stackThreeCards));
+    
   }
 
   function handleStackFourClick() {
-    alert(JSON.stringify(stackFourCards));
+    
   }
 
   function peek(arr){

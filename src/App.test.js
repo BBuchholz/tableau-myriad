@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders projedt name', () => {
+test('should have instructions on screen', () => {
   render(<App />);
-  const linkElement = screen.getByText(/Tableau Myriad/i);
+  const linkElement = screen.getByText(/Click Me/i);
   expect(linkElement).toBeInTheDocument();
 });

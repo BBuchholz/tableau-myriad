@@ -6,12 +6,12 @@ import Col from 'react-bootstrap/Col';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
-
+const GameData = require('./GameData');
 
 function App() {
 
-
-
+  const showTestingAlerts = false;
+    
   function cardKeyToImagePath(cardKey){
     //just temporarily pulling from the repo for sandboxing
     return "https://raw.githubusercontent.com/BBuchholz/" + 
@@ -19,25 +19,16 @@ function App() {
            cardKey + ".jpg";
   };
 
+  function cardKeyArrToImagePath(cardKeyArr){
+    let cardKey = peek(cardKeyArr);
+    if(!cardKey){
+      cardKey = '2D';
+    }
+    return cardKeyToImagePath(cardKey);
+  }
 
-  const [gameData, setGameData] = useState({
-    status: 'not initialized',
-    score: 0,
-    drawStack: [],
-    discardStack: [],
-    oneStack: [],
-    twoStack: [],
-    threeStack: [],
-    fourStack: []
-  });
-  
 
-  //const [discardPileCards, setDiscardPileCards] = useState([]);
-  
-  // const [stackOneCards, setStackOneCards] = useState([]);
-  // const [stackTwoCards, setStackTwoCards] = useState([]);
-  // const [stackThreeCards, setStackThreeCards] = useState([]);
-  // const [stackFourCards, setStackFourCards] = useState([]);
+  const [gameData, setGameData] = useState(GameData());
   
   const [drawLegendText, setDrawLegendText] = useState("");
   const [discardLegendText, setDiscardLegendText] = useState("");
@@ -57,39 +48,34 @@ function App() {
 
   useEffect(() => {
     setDiscardLegendText("x");
-    setDrawLegendText("draw");
+    setDrawLegendText(gameData.drawStack.length);
     setStackOneLegendText("x");
-    setStackTwoLegendText("x");
     setStackThreeLegendText("x");
+    setStackTwoLegendText("x");
     setStackFourLegendText("x");
     setDrawJpgPath(cardKeyToImagePath("1B"));
-    const oneStackKey = peek(gameData.oneStack);
-    setStackOneJpgPath(cardKeyToImagePath(oneStackKey));
-    setStackTwoJpgPath(cardKeyToImagePath("2D"));
-    setStackThreeJpgPath(cardKeyToImagePath("2D"));
-    setStackFourJpgPath(cardKeyToImagePath("2D"));
-  });
-  
-  function loadDeck(){
+    setStackOneJpgPath(cardKeyArrToImagePath(gameData.oneStack));
+    setStackTwoJpgPath(cardKeyArrToImagePath(gameData.twoStack));
+    setStackThreeJpgPath(cardKeyArrToImagePath(gameData.threeStack));
+    setStackFourJpgPath(cardKeyArrToImagePath(gameData.fourStack));
     if(discardJpgPath === ""){
       setDiscardJpgPath(cardKeyToImagePath("2B"));
     }
-    if(gameData.drawStack.length < 1){
-      gameData.drawStack.push("2C");  
-      gameData.drawStack.push("2H");  
-      gameData.drawStack.push("2S");  
-      gameData.drawStack.push("2D"); 
-      gameData.drawStack.push("3C");  
-      gameData.drawStack.push("3H");  
-      gameData.drawStack.push("3S");  
-      gameData.drawStack.push("3D"); 
-      gameData.drawStack.push("4C");  
-      gameData.drawStack.push("4H");  
-      gameData.drawStack.push("4S");  
-      gameData.drawStack.push("4D");  
-      setDrawLegendText(gameData.drawStack.length);
-      setDrawJpgPath(cardKeyToImagePath("1B"));
-    }  
+  });
+  
+  function loadDeckIfNeeded(){
+    
+    gameData.ensureDeckLoad();
+  }
+
+  function testAlert(message){
+
+    if(showTestingAlerts){
+    
+      alert(message);  
+    
+    }    
+
   }
 
 
@@ -117,6 +103,8 @@ function App() {
 
   function drawCards(quantity) {
     
+    testAlert("drawing cards");
+
     const drawnCardKeys = gameData.drawStack.slice(quantity);
 
     const newDeck = gameData.drawStack.filter(key => !drawnCardKeys.includes(key));
@@ -127,22 +115,15 @@ function App() {
     newGameData.twoStack = [...gameData.twoStack, drawnCardKeys[1]];
     newGameData.threeStack = [...gameData.threeStack, drawnCardKeys[2]];
     newGameData.fourStack = [...gameData.fourStack, drawnCardKeys[3]];
-    newGameData.status = generateStatus(newGameData);
     setGameData(newGameData);
-  }
-
-  function generateStatus(thisGameData){
-    return 'Draw Stack: ' + JSON.stringify(thisGameData.drawStack);
   }
 
   function handleDrawClick() {
 
+    loadDeckIfNeeded();
     drawCards(4);
 
   }
-
-
-  loadDeck();
 
 
   return (
@@ -157,7 +138,7 @@ function App() {
           <Col xs={5}>
             <DiscardStack
               jpgPath={discardJpgPath}
-              bodyText={gameData.status} />
+              gameData={gameData} />
           </Col>
         </Row>
         <Row>
@@ -190,7 +171,7 @@ function App() {
 
 }
 
-function DiscardStack({jpgPath, bodyText}) {
+function DiscardStack({jpgPath, gameData}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -207,7 +188,17 @@ function DiscardStack({jpgPath, bodyText}) {
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {bodyText}
+          <div id='modal-game-data'>
+
+    <p>Score:  {JSON.stringify(gameData.score)}</p>
+    <p>Draw Stack:  {JSON.stringify(gameData.drawStack)}</p>
+    <p>Discard Stack:  {JSON.stringify(gameData.discardStack)}</p>
+    <p>One Stack: {JSON.stringify(gameData.oneStack)}</p>
+    <p>two Stack: {JSON.stringify(gameData.twoStack)}</p>
+    <p>three Stack: {JSON.stringify(gameData.threeStack)}</p>
+    <p>four Stack: {JSON.stringify(gameData.fourStack)}</p>
+
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

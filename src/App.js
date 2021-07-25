@@ -7,16 +7,15 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 const GameData = require('./GameData');
+const Card = require('./Card');
 
 function App() {
 
   const showTestingAlerts = false;
     
   function cardKeyToImagePath(cardKey){
-    //just temporarily pulling from the repo for sandboxing
-    return "https://raw.githubusercontent.com/BBuchholz/" + 
-           "make-ten-mod/jpg-mod/public/images/cards-jpg/" + 
-           cardKey + ".jpg";
+    const tempCard = Card(cardKey);
+    return tempCard.cardImgPath;
   };
 
   function cardKeyArrToImagePath(cardKeyArr){
@@ -47,6 +46,9 @@ function App() {
   const [stackFourJpgPath, setStackFourJpgPath] = useState("");
 
   useEffect(() => {
+
+    // look here: https://blog.logrocket.com/react-hooks-cheat-sheet-unlock-solutions-to-common-problems-af4caf699e70/
+    // under heading "useEffect" it shows scoped constants within the effect, maybe that's what we need
     setDiscardLegendText("x");
     setDrawLegendText(gameData.drawStack.length);
     setStackOneLegendText("x");
@@ -65,19 +67,10 @@ function App() {
   
   function loadDeckIfNeeded(){
     
-    gameData.ensureDeckLoad();
+    const newGameData = gameData.ensureDeckIsLoaded();
+
+    setGameData(newGameData);
   }
-
-  function testAlert(message){
-
-    if(showTestingAlerts){
-    
-      alert(message);  
-    
-    }    
-
-  }
-
 
   function handleStackOneClick() {
     
@@ -101,27 +94,17 @@ function App() {
     return arr[idx]
   }
 
-  function drawCards(quantity) {
-    
-    testAlert("drawing cards");
+  function drawCards() {
 
-    const drawnCardKeys = gameData.drawStack.slice(quantity);
+    const newGameData = gameData.deal();
 
-    const newDeck = gameData.drawStack.filter(key => !drawnCardKeys.includes(key));
-    
-    let newGameData = gameData;
-    newGameData.drawStack = newDeck;
-    newGameData.oneStack = [...gameData.oneStack, drawnCardKeys[0]];
-    newGameData.twoStack = [...gameData.twoStack, drawnCardKeys[1]];
-    newGameData.threeStack = [...gameData.threeStack, drawnCardKeys[2]];
-    newGameData.fourStack = [...gameData.fourStack, drawnCardKeys[3]];
     setGameData(newGameData);
   }
 
   function handleDrawClick() {
 
     loadDeckIfNeeded();
-    drawCards(4);
+    drawCards();
 
   }
 

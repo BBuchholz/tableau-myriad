@@ -26,6 +26,23 @@ function App() {
     return cardKeyToImagePath(cardKey);
   }
 
+  const drawLegendTextId = 'draw-legend-text-id';
+  const drawJpgPathId = 'draw-jpg-path-id';
+
+  const discardLegendTextId = 'discard-legend-text-id';
+  const discardJpgPathId = 'discard-jpg-path-id';
+
+  const stackOneLegendTextId = 'stack-one-legend-text-id';
+  const stackOneJpgPathId = 'stack-one-jpg-path-id';
+
+  const stackTwoLegendTextId = 'stack-two-legend-text-id';
+  const stackTwoJpgPathId = 'stack-two-jpg-path-id';
+
+  const stackThreeLegendTextId = 'stack-three-legend-text-id';
+  const stackThreeJpgPathId = 'stack-three-jpg-path-id';
+
+  const stackFourLegendTextId = 'stack-four-legend-text-id';
+  const stackFourJpgPathId = 'stack-four-jpg-path-id';
 
   const [gameData, setGameData] = useState(GameData());
   
@@ -45,10 +62,18 @@ function App() {
   const [stackThreeJpgPath, setStackThreeJpgPath] = useState("");
   const [stackFourJpgPath, setStackFourJpgPath] = useState("");
 
+  // individual useEffects below will replace this
   useEffect(() => {
+
+    //TODO: move game data modal settings into individual useEffects like below
+    // have a useState variables for each div just like legend text 
+    // then when deals happen we can update the text representation
+
 
     // look here: https://blog.logrocket.com/react-hooks-cheat-sheet-unlock-solutions-to-common-problems-af4caf699e70/
     // under heading "useEffect" it shows scoped constants within the effect, maybe that's what we need
+    // also look here
+    // https://blog.logrocket.com/guide-to-react-useeffect-hook/
     setDiscardLegendText("x");
     setDrawLegendText(gameData.drawStack.length);
     setStackOneLegendText("x");
@@ -63,7 +88,112 @@ function App() {
     if(discardJpgPath === ""){
       setDiscardJpgPath(cardKeyToImagePath("2B"));
     }
-  });
+  }, [gameData]);
+
+
+
+  // handle discardLegendText changes
+  useEffect(() => {
+    
+    // see: https://stackoverflow.com/a/1358815/670768 
+    let div = document.getElementById(discardLegendTextId);
+    div.textContent = discardLegendText;
+
+  }, [discardLegendText]);
+
+  // handle discardJpgPath changes
+  useEffect(() => {
+
+    let img = document.getElementById(discardJpgPathId);
+    img.src = discardJpgPath;
+    
+  }, [discardJpgPath]);
+
+  // handle drawLegendText changes
+  useEffect(() => {
+    
+    // see: https://stackoverflow.com/a/1358815/670768 
+    let div = document.getElementById(drawLegendTextId);
+    div.textContent = drawLegendText;
+
+  }, [drawLegendText]);
+
+  // handle drawJpgPath changes
+  useEffect(() => {
+
+    let img = document.getElementById(drawJpgPathId);
+    img.src = drawJpgPath;
+    
+  }, [drawJpgPath]);
+
+  // handle stackOneLegendText changes
+  useEffect(() => {
+    
+    // see: https://stackoverflow.com/a/1358815/670768 
+    let div = document.getElementById(stackOneLegendTextId);
+    div.textContent = stackOneLegendText;
+
+  }, [stackOneLegendText]);
+
+  // handle stackOneJpgPath changes
+  useEffect(() => {
+
+    let img = document.getElementById(stackOneJpgPathId);
+    img.src = stackOneJpgPath;
+    
+  }, [stackOneJpgPath]);
+
+  // handle stackTwoLegendText changes
+  useEffect(() => {
+    
+    // see: https://stackoverflow.com/a/1358815/670768 
+    let div = document.getElementById(stackTwoLegendTextId);
+    div.textContent = stackTwoLegendText;
+
+  }, [stackTwoLegendText]);
+
+  // handle stackTwoJpgPath changes
+  useEffect(() => {
+
+    let img = document.getElementById(stackTwoJpgPathId);
+    img.src = stackTwoJpgPath;
+    
+  }, [stackTwoJpgPath]);
+
+  // handle stackThreeLegendText changes
+  useEffect(() => {
+    
+    // see: https://stackoverflow.com/a/1358815/670768 
+    let div = document.getElementById(stackThreeLegendTextId);
+    div.textContent = stackThreeLegendText;
+
+  }, [stackThreeLegendText]);
+
+  // handle stackThreeJpgPath changes
+  useEffect(() => {
+
+    let img = document.getElementById(stackThreeJpgPathId);
+    img.src = stackThreeJpgPath;
+    
+  }, [stackThreeJpgPath]);
+
+  // handle stackFourLegendText changes
+  useEffect(() => {
+    
+    // see: https://stackoverflow.com/a/1358815/670768 
+    let div = document.getElementById(stackFourLegendTextId);
+    div.textContent = stackFourLegendText;
+
+  }, [stackFourLegendText]);
+
+  // handle stackFourJpgPath changes
+  useEffect(() => {
+
+    let img = document.getElementById(stackFourJpgPathId);
+    img.src = stackFourJpgPath;
+    
+  }, [stackFourJpgPath]);
+
   
   function loadDeckIfNeeded(){
     
@@ -115,37 +245,37 @@ function App() {
         <Row>
           <Col xs={5}>
             <Stack handleClick={handleDrawClick} 
-                   legendText={drawLegendText}
-                   jpgPath={drawJpgPath} />
+                   legendTextId={drawLegendTextId}
+                   jpgPathId={drawJpgPathId} />
           </Col>
           <Col xs={5}>
             <DiscardStack
-              jpgPath={discardJpgPath}
-              gameData={gameData} />
+              jpgPathId={discardJpgPathId}
+              legendTextId={discardLegendTextId} />
           </Col>
         </Row>
         <Row>
           <Col xs={5}>
-            <Stack handleClick={handleStackOneClick} 
-                   legendText={stackOneLegendText}
-                   jpgPath={stackOneJpgPath} />
+            <Stack handleClick={handleStackOneClick}
+                   legendTextId={stackOneLegendTextId}
+                   jpgPathId={stackOneJpgPathId} />
           </Col>
           <Col xs={5}>
             <Stack handleClick={handleStackTwoClick} 
-                   legendText={stackTwoLegendText}
-                   jpgPath={stackTwoJpgPath} />
+                   legendTextId={stackTwoLegendTextId}
+                   jpgPathId={stackTwoJpgPathId} />
           </Col>
         </Row>
         <Row> 
           <Col xs={5}>
             <Stack handleClick={handleStackThreeClick} 
-                   legendText={stackThreeLegendText}
-                   jpgPath={stackThreeJpgPath} />
+                   legendTextId={stackThreeLegendTextId}
+                   jpgPathId={stackThreeJpgPathId} />
           </Col>
           <Col xs={5}>
             <Stack handleClick={handleStackFourClick} 
-                   legendText={stackFourLegendText}
-                   jpgPath={stackFourJpgPath} />
+                   legendTextId={stackFourLegendTextId}
+                   jpgPathId={stackFourJpgPathId} />
           </Col>
         </Row>
       </Container> 
@@ -154,7 +284,7 @@ function App() {
 
 }
 
-function DiscardStack({jpgPath, gameData}) {
+function DiscardStack({jpgPath, gameData, jpgPathId, legendTextId}) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -163,8 +293,8 @@ function DiscardStack({jpgPath, gameData}) {
   return (
     <div>
       <Stack handleClick={handleShow} 
-             legendText={'Click Me'}
-             jpgPath={jpgPath} />
+             legendTextId={legendTextId}
+             jpgPathId={jpgPathId} />
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -198,8 +328,8 @@ function DiscardStack({jpgPath, gameData}) {
 
 function Stack({isHorizontal,
                 handleClick,
-                legendText,
-                jpgPath}) {
+                legendTextId,
+                jpgPathId}) {
   
   let className = '';
   if(isHorizontal) {
@@ -208,10 +338,11 @@ function Stack({isHorizontal,
   
   return (
     <div className='stack' onClick={handleClick}>
-      <p>[{legendText}]</p>
+      <p id={legendTextId}></p>
       <img 
           className={className}
-          src={jpgPath}
+          id={jpgPathId}
+          src=''
           alt={"card goes here"} /> 
     </div>
   );
